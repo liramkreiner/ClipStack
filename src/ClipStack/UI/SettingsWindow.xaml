@@ -1,0 +1,319 @@
+<Window x:Class="ClipStack.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ClipStack Settings" Width="780" Height="600" MinWidth="620" MinHeight="460"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="True"
+        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="14">
+    <Window.Resources>
+        <Style x:Key="PageTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,16" />
+        </Style>
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,18,0,8" />
+        </Style>
+        <Style x:Key="Hint" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Opacity" Value="0.7" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,2,0,0" />
+        </Style>
+        <!-- Windows 11 style navigation: subtle fill and an accent pill on the selected page -->
+        <Style x:Key="NavItem" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Bg" CornerRadius="4" Padding="14,8" Background="Transparent">
+                            <Grid>
+                                <Border x:Name="Pill" Width="3" Height="16" CornerRadius="1.5" Margin="-14,0,0,0"
+                                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                                        Background="{DynamicResource AccentFillColorDefaultBrush}" Visibility="Collapsed" />
+                                <ContentPresenter />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                <Setter TargetName="Pill" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="Nav" Grid.Column="0" Grid.RowSpan="2" Margin="8,12,4,12" BorderThickness="0" Background="Transparent"
+                 SelectionChanged="OnNavChanged" ItemContainerStyle="{StaticResource NavItem}">
+            <ListBoxItem Tag="General">General</ListBoxItem>
+            <ListBoxItem Tag="History">History</ListBoxItem>
+            <ListBoxItem Tag="Privacy">Privacy</ListBoxItem>
+            <ListBoxItem Tag="Appearance">Appearance</ListBoxItem>
+            <ListBoxItem Tag="Advanced">Advanced</ListBoxItem>
+            <ListBoxItem Tag="About">About</ListBoxItem>
+        </ListBox>
+
+        <ScrollViewer Grid.Column="1" Grid.Row="0" VerticalScrollBarVisibility="Auto" Padding="20,16,28,16">
+            <Grid>
+                <!-- GENERAL -->
+                <StackPanel x:Name="PageGeneral">
+                    <TextBlock Text="General" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Shortcut to open clipboard history" FontWeight="SemiBold" />
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <TextBox x:Name="HotkeyBox" Width="220" IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                         PreviewKeyDown="OnHotkeyKeyDown" GotKeyboardFocus="OnHotkeyFocus" LostKeyboardFocus="OnHotkeyBlur"
+                                         ToolTip="Click, then press the new key combination" />
+                                <Button Content="Reset" Margin="8,0,0,0" Click="OnHotkeyReset" />
+                            </StackPanel>
+                            <TextBlock x:Name="HotkeyStatus" Style="{StaticResource Hint}" Text="Click the box and press a key combination." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <CheckBox x:Name="StartWithWindows" Content="Start with Windows" />
+                            <CheckBox x:Name="ShowTrayIcon" Content="Show icon in the system tray" />
+                            <TextBlock Style="{StaticResource Hint}" Text="If hidden, run ClipStack again to open these settings." />
+                            <CheckBox x:Name="PasteOnSelect" Content="Paste automatically after choosing an item" Margin="0,10,0,2" />
+                            <TextBlock Style="{StaticResource Hint}" Text="When off, choosing an item only copies it to the clipboard." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Open the history window" VerticalAlignment="Center" />
+                            <ComboBox x:Name="Placement" Grid.Column="1" Width="230" DisplayMemberPath="Label" SelectedValuePath="Value" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <!-- HISTORY -->
+                <StackPanel x:Name="PageHistory" Visibility="Collapsed">
+                    <TextBlock Text="History" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Maximum number of items" VerticalAlignment="Center" />
+                                <TextBlock Style="{StaticResource Hint}" Text="Oldest unpinned items are removed first. Pinned items are never removed automatically." />
+                            </StackPanel>
+                            <ComboBox x:Name="MaxItems" Grid.Column="1" Width="160" VerticalAlignment="Center" DisplayMemberPath="Label" SelectedValuePath="Value" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Automatically delete items older than" VerticalAlignment="Center" />
+                                <ComboBox x:Name="AutoCleanup" Grid.Column="1" Width="160" DisplayMemberPath="Label" SelectedValuePath="Value" />
+                            </Grid>
+                            <CheckBox x:Name="CleanupIncludesPinned" Content="Also delete old pinned items" Margin="0,10,0,0" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <CheckBox x:Name="AllowDuplicates" Content="Keep duplicate entries" />
+                            <TextBlock Style="{StaticResource Hint}" Text="When off, copying the same thing again moves it to the top instead of adding it twice." />
+                            <CheckBox x:Name="TrackUsage" Content="Rank frequently used items higher in search" Margin="0,10,0,2" />
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Clear" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Clear history…" Click="OnClearHistory" />
+                            <Button Content="Clear everything including pinned…" Margin="8,0,0,0" Click="OnClearEverything" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- PRIVACY -->
+                <StackPanel x:Name="PagePrivacy" Visibility="Collapsed">
+                    <TextBlock Text="Privacy" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <CheckBox x:Name="IgnoreSensitive" Content="Don't save content that looks sensitive" />
+                            <TextBlock Style="{StaticResource Hint}"
+                                       Text="Passwords, API keys and tokens, JWTs, private keys, credit card numbers and one-time codes are detected on this PC and never stored. Content that apps (like password managers) mark as private is always ignored." />
+                            <CheckBox x:Name="EncryptHistory" Content="Encrypt history on disk" Margin="0,12,0,2" />
+                            <TextBlock Style="{StaticResource Hint}" Text="Uses Windows Data Protection: only your Windows account on this PC can read the history." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <CheckBox x:Name="StoreImages" Content="Save images" />
+                            <CheckBox x:Name="StoreFiles" Content="Save copied files and folders" />
+                            <CheckBox x:Name="StoreRichText" Content="Save formatting (rich text and HTML)" />
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Excluded applications" Style="{StaticResource SectionTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Hint}" Margin="0,0,0,8"
+                                       Text="Nothing copied from these apps is saved. Copy and paste still work normally." />
+                            <ListBox x:Name="ExcludedApps" Height="150" />
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="ExcludeInput" KeyDown="OnExcludeInputKey" ToolTip="Executable name, e.g. KeePass.exe" />
+                                <Button Grid.Column="1" Content="Add" Margin="8,0,0,0" Click="OnExcludeAdd" />
+                                <Button Grid.Column="2" Content="Browse…" Margin="8,0,0,0" Click="OnExcludeBrowse" />
+                                <Button Grid.Column="3" Content="Remove" Margin="8,0,0,0" Click="OnExcludeRemove" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- APPEARANCE -->
+                <StackPanel x:Name="PageAppearance" Visibility="Collapsed">
+                    <TextBlock Text="Appearance" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Theme" VerticalAlignment="Center" />
+                            <ComboBox x:Name="Theme" Grid.Column="1" Width="200" DisplayMemberPath="Label" SelectedValuePath="Value" />
+                        </Grid>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Window size (width × height)" VerticalAlignment="Center" />
+                                <TextBox x:Name="PopupWidth" Grid.Column="1" Width="80" />
+                                <TextBox x:Name="PopupHeight" Grid.Column="2" Width="80" Margin="8,0,0,0" />
+                            </Grid>
+                            <TextBlock Style="{StaticResource Hint}" Text="You can also resize the history window by dragging its edges." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="44" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Preview length (characters)" VerticalAlignment="Center" />
+                                <Slider x:Name="PreviewLength" Grid.Column="1" Width="200" Minimum="40" Maximum="400"
+                                        TickFrequency="10" IsSnapToTickEnabled="True" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{Binding Value, ElementName=PreviewLength}" VerticalAlignment="Center" TextAlignment="Right" />
+                            </Grid>
+                            <CheckBox x:Name="ShowTimestamps" Content="Show when items were copied" Margin="0,10,0,2" />
+                            <CheckBox x:Name="ShowAppIcons" Content="Show icons of the apps items were copied from" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ADVANCED -->
+                <StackPanel x:Name="PageAdvanced" Visibility="Collapsed">
+                    <TextBlock Text="Advanced" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Database location" FontWeight="SemiBold" />
+                            <Grid Margin="0,8,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="DatabaseDirectory" IsReadOnly="True" />
+                                <Button Grid.Column="1" Content="Change…" Margin="8,0,0,0" Click="OnDbChange" />
+                                <Button Grid.Column="2" Content="Default" Margin="8,0,0,0" Click="OnDbDefault" />
+                                <Button Grid.Column="3" Content="Open" Margin="8,0,0,0" Click="OnDbOpen" />
+                            </Grid>
+                            <TextBlock Style="{StaticResource Hint}" Text="The database is moved when you save. Keep it on a local drive." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <CheckBox x:Name="EnableLogging" Content="Write a diagnostic log" />
+                            <TextBlock Style="{StaticResource Hint}" Text="The log contains events and errors only, never clipboard contents. Errors are always logged." />
+                            <Button Content="Open log folder" HorizontalAlignment="Left" Margin="0,8,0,0" Click="OnOpenLogFolder" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Reset" FontWeight="SemiBold" />
+                            <TextBlock Style="{StaticResource Hint}" Text="Restore all settings to their defaults. Your history is kept." />
+                            <Button Content="Reset settings…" HorizontalAlignment="Left" Margin="0,8,0,0" Click="OnReset" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ABOUT -->
+                <StackPanel x:Name="PageAbout" Visibility="Collapsed">
+                    <TextBlock Text="About" Style="{StaticResource PageTitle}" />
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock x:Name="AboutVersion" FontSize="16" FontWeight="SemiBold" />
+                            <TextBlock Style="{StaticResource Hint}" Margin="0,6,0,0"
+                                       Text="A fast, private clipboard history for Windows. Copy anything, press the shortcut, find it, press Enter." />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Your data stays on this computer" FontWeight="SemiBold" />
+                            <TextBlock Style="{StaticResource Hint}" Margin="0,6,0,0"
+                                       Text="ClipStack has no account, no cloud sync and no analytics. It never connects to the internet. History is stored in a local database that only your Windows account can access." />
+                            <TextBlock x:Name="AboutStats" Style="{StaticResource Hint}" Margin="0,10,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <Border Grid.Column="1" Grid.Row="1" Padding="20,12,28,16">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="SaveButton" Content="Save" Width="100" Click="OnSave" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
+                <Button Content="Cancel" Width="100" Margin="8,0,0,0" Click="OnCancel" IsCancel="True" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

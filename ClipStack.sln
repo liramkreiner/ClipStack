@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3FE79B19-AA0A-44C9-8BF8-FA320ACAD72C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipStack", "src\ClipStack\ClipStack.csproj", "{1AF8CC78-8204-4AFA-8227-11618813D2E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1010F612-1CCC-4E66-A1DA-2C3908B17C71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipStack.Tests", "tests\ClipStack.Tests\ClipStack.Tests.csproj", "{FFFDE339-9105-4833-9DA8-1041C2200A84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1AF8CC78-8204-4AFA-8227-11618813D2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF8CC78-8204-4AFA-8227-11618813D2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF8CC78-8204-4AFA-8227-11618813D2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF8CC78-8204-4AFA-8227-11618813D2E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFDE339-9105-4833-9DA8-1041C2200A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFDE339-9105-4833-9DA8-1041C2200A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFDE339-9105-4833-9DA8-1041C2200A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFDE339-9105-4833-9DA8-1041C2200A84}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1AF8CC78-8204-4AFA-8227-11618813D2E7} = {3FE79B19-AA0A-44C9-8BF8-FA320ACAD72C}
+		{FFFDE339-9105-4833-9DA8-1041C2200A84} = {1010F612-1CCC-4E66-A1DA-2C3908B17C71}
+	EndGlobalSection
+EndGlobal

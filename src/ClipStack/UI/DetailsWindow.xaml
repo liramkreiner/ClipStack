@@ -1,0 +1,44 @@
+<Window x:Class="ClipStack.UI.DetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Clipboard item" Width="640" Height="520" MinWidth="420" MinHeight="320"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="14">
+    <Grid Margin="20,16,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="Heading" FontSize="20" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="Meta" Grid.Row="1" FontSize="12" Opacity="0.75" Margin="0,4,0,12" TextWrapping="Wrap" />
+
+        <Border Grid.Row="2" CornerRadius="6" BorderThickness="1"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+            <Grid>
+                <TextBox x:Name="ContentText" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" BorderThickness="0"
+                         Background="Transparent" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                         FontFamily="Cascadia Mono, Consolas" FontSize="13" Padding="8" />
+                <ScrollViewer x:Name="ImageScroller" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                    <Image x:Name="ContentImage" Stretch="Uniform" StretchDirection="DownOnly" Margin="8"
+                           RenderOptions.BitmapScalingMode="HighQuality" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="3" Margin="0,14,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="PinButton" Click="OnPin" />
+                <Button Content="Delete" Margin="8,0,0,0" Click="OnDelete" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CopyPlainButton" Content="Copy as plain text" Margin="0,0,8,0" Click="OnCopyPlain" />
+                <Button Content="Copy" Width="90" Click="OnCopy" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
+                <Button Content="Close" Width="90" Margin="8,0,0,0" Click="OnClose" IsCancel="True" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

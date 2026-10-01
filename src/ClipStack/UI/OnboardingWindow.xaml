@@ -1,0 +1,22 @@
+<Window x:Class="ClipStack.UI.OnboardingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome to ClipStack" Width="460" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" Topmost="True"
+        FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="14">
+    <StackPanel Margin="32,28,32,24">
+        <Image x:Name="Logo" Width="56" Height="56" HorizontalAlignment="Left" Margin="0,0,0,16" />
+        <TextBlock Text="Your clipboard, remembered." FontSize="24" FontWeight="SemiBold" TextWrapping="Wrap" />
+        <TextBlock Margin="0,16,0,0" TextWrapping="Wrap" Text="Copy anything normally." />
+        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap">
+            <Run Text="Press" />
+            <Run x:Name="ShortcutRun" FontWeight="SemiBold" />
+            <Run Text="to access your history, type to search, and press Enter to paste." />
+        </TextBlock>
+        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Text="Everything stays on this computer." />
+        <TextBlock Margin="0,14,0,0" TextWrapping="Wrap" FontSize="12" Opacity="0.7"
+                   Text="ClipStack lives in the system tray. Right-click its icon to pause, clear history or change settings." />
+        <Button Content="Get Started" HorizontalAlignment="Right" Margin="0,24,0,0" Padding="20,6" IsDefault="True"
+                Style="{DynamicResource AccentButtonStyle}" Click="OnGetStarted" />
+    </StackPanel>
+</Window>
